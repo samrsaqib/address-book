@@ -1,0 +1,190 @@
+package AddressBook;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+public class Application {
+
+	        @SuppressWarnings("resource")
+			public static void main(String[] args) {
+
+	                ArrayList<Contact> list = new ArrayList<Contact>();
+
+	                File file = new File("contact.dat");
+	                list=readFromFile(file);
+	                int option=0;
+	                while(true){
+	                        menu();
+	                        option = new Scanner(System.in).nextInt();
+	                        switch(option){
+
+	                        case 1: addNewContact(list); 
+	                        break;
+	                        case 2:
+	                        	for(Contact t: list)
+	                                        System.out.println(t);
+	                        break;
+	                        case 3:
+	                                int i=search(list,"Ahmad");
+	                                if(i>=0)
+	                                        System.out.println("Found at index " +i);
+	                                else
+	                                        System.out.println("Not found");
+	                                break;
+	                        case 7:
+	                                writeToFile(list,file);
+	                                System.exit(0); 
+	                                break;
+	                        }
+	                }
+
+
+	        }
+
+	        public static void writeToFile(ArrayList<Contact> list1,File f){
+
+	                try {
+	                        FileWriter fw = new FileWriter(f);
+	                        BufferedWriter bw = new BufferedWriter(fw);
+
+	                        for(Contact temp:list1)
+	                        {
+	                                bw.write(temp.getName()+"_"+temp.getNumber());
+	                                bw.newLine();
+	                        }
+
+	                        bw.close();
+
+	                } catch (IOException e) {
+
+	                        e.printStackTrace();
+	                }
+
+
+	        }
+
+
+	                public static ArrayList<Contact> readFromFile(File f){
+
+	                        ArrayList<Contact> list = new ArrayList<Contact>();
+
+	                        FileReader fr;
+	                        try {
+	                                fr = new FileReader(f);
+	                                @SuppressWarnings("resource")
+									BufferedReader br = new BufferedReader(fr);
+	                                String temp=null;
+	                                while((temp=br.readLine())!=null)
+	                                {
+	                                        String array[]= temp.split("_");
+	                                        Contact b= new Contact(array[0],array[1], array[2]);
+
+	                                        list.add(b);
+	                                }
+
+	                        } catch (FileNotFoundException e) {
+	                                e.printStackTrace();
+	                        } catch (IOException e) {
+	                                e.printStackTrace();
+	                        }
+
+	                        return list;
+	                }
+
+	                public static void menu(){
+	                        System.out.println("\n1. Add new Contact");
+	                        System.out.println("2. Print List");
+	                        System.out.println("3. Search Contact");
+
+	                        System.out.println("7. Exit");
+	                }
+
+	                public static void addNewContact(ArrayList<Contact> list){
+	                        @SuppressWarnings("resource")
+							Scanner sc = new Scanner(System.in);
+	                        System.out.print("Enter name:");
+	                        String name= sc.nextLine();
+	                        System.out.print("Enter number:");
+	                        String number= sc.nextLine();
+	                        System.out.print("Enter address:");
+	                        String address= sc.nextLine();
+
+	                        list.add(new Contact(name,number, address));
+	                }
+
+	                public static int search(ArrayList<Contact> list, String name){
+	                        int index=-1;
+	                           System.out.print("Enter name:");
+							     @SuppressWarnings("resource")
+								Scanner sc = new Scanner(System.in);
+							   String name1= sc.nextLine();
+	                        for(int i =0 ;i<list.size();i++)
+	                                if(name1.equals(list.get(i).getName()))
+	                                {
+	                                        index=i;
+	                                        
+											break;
+
+
+	                                }
+	                        return index;
+	                }
+
+	}
+	
+	
+	
+	
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	
+	
+	
+package AddressBook;
+
+
+public class Contact{
+private String name;
+private String number;
+private String address;
+
+public Contact(String name, String number, String address){
+        this.name = name;
+        this.number = number;
+        this.address = address;
+}
+
+public void setName(String name){
+	this.name = name;
+}
+
+public String getName(){
+        return name;
+}
+
+public void setNummber(String number){
+	this.number = number;
+}
+
+public String getNumber(){
+        return number;
+}
+
+public void setAddress(String address){
+	this.address = address;
+}
+
+public String getAddress(){
+	return address;
+}
+
+public String toString(){
+        return String.format("\n\nName: %s \nContact Number:%s \nAddress:%s\n\n", name, number, address);
+}
